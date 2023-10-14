@@ -5,13 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlideTableMover"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Canvas Name="canvas" Width="800" Height="450">
-        <Rectangle Name="map" Width="800" Height="450" Fill="Gray" MouseDown="Canvas_MouseDown" />
-        <!-- X and Y axes -->
-        <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>
-        <Line X1="400" Y1="0" X2="400" Y2="450" Stroke="Black" StrokeThickness="2"/>
-        <!-- Rectangle -->
-        <Rectangle Name="movingRectangle" Width="50" Height="50" Fill="Blue"  Canvas.Left="0" Canvas.Top="0"/>
-    </Canvas>
+       Title="Slide Table Mover" Height="500" Width="800">
+    <Grid>
+        <!-- Header Row -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock Text="X Speed:" VerticalAlignment="Center"/>
+            <TextBox x:Name="xSpeedTextBox" Width="50" VerticalAlignment="Center" Text="50"/>
+            <TextBlock Text="Y Speed:" VerticalAlignment="Center"/>
+            <TextBox x:Name="ySpeedTextBox" Width="50" VerticalAlignment="Center" Text="100"/>
+            <Button Content="Apply Speed" Click="ApplySpeed_Click"/>
+        </StackPanel>
+        <Canvas Grid.Row="1" Name="canvas" Width="800" Height="450">
+            <Rectangle Name="map" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
+            <!-- X and Y axes -->
+            <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>
+            <Line X1="400" Y1="0" X2="400" Y2="450" Stroke="Black" StrokeThickness="2"/>
+            <!-- Rectangle -->
+            <Rectangle Name="movingRectangle" Width="50" Height="50" Fill="Blue"  Canvas.Left="0" Canvas.Top="0"/>
+        </Canvas>
+    </Grid>
 </Window>
