@@ -31,25 +31,45 @@ namespace SlideTableMover
                 MessageBox.Show("Invalid speed values. Please enter valid numbers.");
             }
         }
+        private void ApplyCoordinates_Click(object sender, RoutedEventArgs e)
+        {
+            if (double.TryParse(newXTextBox.Text, out double newX) && double.TryParse(newYTextBox.Text, out double newY))
+            {
+                MoveRectangleTo(newX, newY);
+            }
+            else
+            {
+                MessageBox.Show("Invalid coordinate values. Please enter valid numbers.");
+            }
+        }
+
+        private void MoveRectangleTo(double newX, double newY)
+        {
+            double currentX = Canvas.GetLeft(movingRectangle);
+            double currentY = Canvas.GetTop(movingRectangle);
+
+            double deltaX = newX - currentX;
+            double deltaY = newY - currentY;
+
+            double xDuration = Math.Abs(deltaX) / xSpeed;
+            double yDuration = Math.Abs(deltaY) / ySpeed;
+
+            DoubleAnimation xAnimation = new DoubleAnimation(newX, TimeSpan.FromSeconds(xDuration));
+            DoubleAnimation yAnimation = new DoubleAnimation(newY, TimeSpan.FromSeconds(yDuration));
+
+            movingRectangle.BeginAnimation(Canvas.LeftProperty, xAnimation);
+            movingRectangle.BeginAnimation(Canvas.TopProperty, yAnimation);
+
+            currentXTextBox.Text = newX.ToString();
+            currentYTextBox.Text = newY.ToString();
+        }
+
         private void WorkPane_MouseDown(object sender, MouseButtonEventArgs e)
         {
             double xClicked = e.GetPosition(canvas).X - movingRectangle.ActualWidth / 2;
             double yClicked = e.GetPosition(canvas).Y - movingRectangle.ActualHeight / 2;
 
-            double currentX = Canvas.GetLeft(movingRectangle);
-            double currentY = Canvas.GetTop(movingRectangle);
-
-            double deltaX = xClicked - currentX;
-            double deltaY = yClicked - currentY; 
-
-            double xDuration = Math.Abs(deltaX) / xSpeed;
-            double yDuration = Math.Abs(deltaY) / ySpeed;
-
-            DoubleAnimation xAnimation = new DoubleAnimation(xClicked, TimeSpan.FromSeconds(xDuration));
-            DoubleAnimation yAnimation = new DoubleAnimation(yClicked, TimeSpan.FromSeconds(yDuration));
-
-            movingRectangle.BeginAnimation(Canvas.LeftProperty, xAnimation);
-            movingRectangle.BeginAnimation(Canvas.TopProperty, yAnimation);
+            MoveRectangleTo(xClicked, yClicked);
         }
     }
 }

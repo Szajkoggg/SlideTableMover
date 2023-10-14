@@ -18,6 +18,15 @@
             <TextBlock Text="Y Speed:" VerticalAlignment="Center"/>
             <TextBox x:Name="ySpeedTextBox" Width="50" VerticalAlignment="Center" Text="100"/>
             <Button Content="Apply Speed" Click="ApplySpeed_Click"/>
+            <TextBlock Text="Current X:" VerticalAlignment="Center"/>
+            <TextBox x:Name="currentXTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
+            <TextBlock Text="Current Y:" VerticalAlignment="Center"/>
+            <TextBox x:Name="currentYTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
+            <TextBlock Text="New X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="newXTextBox" Width="50" VerticalAlignment="Center"/>
+            <TextBlock Text="New Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="newYTextBox" Width="50" VerticalAlignment="Center"/>
+            <Button Content="Apply Coordinates" Click="ApplyCoordinates_Click" Margin="10,0,0,0"/>
         </StackPanel>
         <Canvas Grid.Row="1" Name="canvas" Width="800" Height="450">
             <Rectangle Name="map" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
