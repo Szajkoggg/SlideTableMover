@@ -10,16 +10,15 @@ namespace SlideTableMover
 
     public partial class MainWindow : Window
     {
-        private double motorX = 0;         // Motor X position
-        private double motorY = 0;         // Motor Y position
-        private double motorStepSize = 0.3;  // Size of each motor step
+        private double motorX = 0;
+        private double motorY = 0;
+        private double motorStepSize = 0.3;  
         private int motorXDirection = 1;   // Motor X direction (1 for right, -1 for left)
         private int motorYDirection = 1;   // Motor Y direction (1 for down, -1 for up)
         private int motorStepDurationms = 10;
         private Timer motorTimer;
         private double targetX;
         private double targetY;
-        private bool isAnimationInProgress = false;
 
         public MainWindow()
         {
@@ -33,9 +32,6 @@ namespace SlideTableMover
 
         private void MotorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (!isAnimationInProgress)
-            {
-               // isAnimationInProgress = true;
                
             double deltaX = targetX - motorX;
             double deltaY = targetY - motorY;
@@ -72,7 +68,7 @@ namespace SlideTableMover
                 }
                 MoveRectangleTo(motorX, motorY, motorStepDurationms);
                 
-            }
+            
         }
         
 
@@ -138,19 +134,6 @@ namespace SlideTableMover
                 DoubleAnimation xAnimation = new DoubleAnimation(newX, TimeSpan.FromMilliseconds(animationDuration));
                 DoubleAnimation yAnimation = new DoubleAnimation(newY, TimeSpan.FromMilliseconds(animationDuration));
                 
-                /*
-                xAnimation.Completed += (s, e) =>
-                {
-                    xAnimationComplete = true;
-                };
-                yAnimation.Completed += (s, e) =>
-                {
-                    yAnimationComplete = true; 
-                };
-                if (xAnimationComplete && yAnimationComplete)
-                {
-                    isAnimationInProgress = false;
-                }*/
                 movingRectangle.BeginAnimation(Canvas.LeftProperty, xAnimation);
                 movingRectangle.BeginAnimation(Canvas.TopProperty, yAnimation);
                 currentXTextBox.Text = newX.ToString();
