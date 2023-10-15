@@ -74,8 +74,12 @@ namespace SlideTableMover
                 });
             }
                 MoveRectangleTo(motorXCoordinate, motorYCoordinate, motorStepDurationms);
-                
-            
+            Dispatcher.Invoke(() =>
+            {
+                xPosTextBox.Text = motorX.ToString();
+                yPosTextBox.Text = motorY.ToString();
+            });
+
         }
         
 
@@ -121,6 +125,23 @@ namespace SlideTableMover
             else
             {
                 MessageBox.Show("Invalid coordinate values. Please enter valid numbers.");
+            }
+        }
+
+        private void ApplyPositions_Click(object sender, RoutedEventArgs e)
+        {
+            StopMotor();
+
+            if (double.TryParse(newXPosTextBox.Text, out double newX) && double.TryParse(newYPosTextBox.Text, out double newY))
+            {
+                targetX = newX*motorStepSize;
+                targetY = newY*motorStepSize;
+
+                StartMotor();
+            }
+            else
+            {
+                MessageBox.Show("Invalid position values. Please enter valid numbers.");
             }
         }
 

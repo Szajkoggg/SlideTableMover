@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlideTableMover"
         mc:Ignorable="d"
-       Title="Slide Table Mover" Height="525" Width="800">
+       Title="Slide Table Mover" Height="550" Width="800">
     <Grid>
         <!-- Header Row -->
         <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
@@ -21,9 +22,9 @@
             <Button Content="Apply Speed" Click="ApplySpeed_Click"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="Current X:" VerticalAlignment="Center"/>
+            <TextBlock Text="X Coord:" VerticalAlignment="Center"/>
             <TextBox x:Name="currentXTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
-            <TextBlock Text="Current Y:" VerticalAlignment="Center"/>
+            <TextBlock Text="Y Coord:" VerticalAlignment="Center"/>
             <TextBox x:Name="currentYTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="New X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox x:Name="newXTextBox" Width="50" VerticalAlignment="Center"/>
@@ -31,7 +32,18 @@
             <TextBox x:Name="newYTextBox" Width="50" VerticalAlignment="Center"/>
             <Button Content="Apply Coordinates" Click="ApplyCoordinates_Click" Margin="10,0,0,0"/>
         </StackPanel>
-        <Canvas Grid.Row="2" Name="canvas" Width="800" Height="450">
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="XPos:" VerticalAlignment="Center"/>
+            <TextBox x:Name="xPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
+            <TextBlock Text="YPos:" VerticalAlignment="Center"/>
+            <TextBox x:Name="yPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
+            <TextBlock Text="New XPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="newXPosTextBox" Width="50" VerticalAlignment="Center"/>
+            <TextBlock Text="New YPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="newYPosTextBox" Width="50" VerticalAlignment="Center"/>
+            <Button Content="Apply Positions" Click="ApplyPositions_Click" Margin="10,0,0,0"/>
+        </StackPanel>
+        <Canvas Grid.Row="3" Name="canvas" Width="800" Height="450">
             <Rectangle Name="map" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
             <!-- X and Y axes -->
             <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>
