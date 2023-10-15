@@ -15,10 +15,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Text="Motorstep(px):" VerticalAlignment="Center"/>
-            <TextBox x:Name="MotorstepTextBox" Width="50" VerticalAlignment="Center" Text="0,3"/>
-            <TextBlock Text="Motorstep duration (ms):" VerticalAlignment="Center"/>
-            <TextBox x:Name="MotorstepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
+            <TextBlock Text="MotorXStep(px):" VerticalAlignment="Center"/>
+            <TextBox x:Name="MotorXStepTextBox" Width="50" VerticalAlignment="Center" Text="0,3"/>
+            <TextBlock Text="MotorXStep duration (ms):" VerticalAlignment="Center"/>
+            <TextBox x:Name="MotorXStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
+            <TextBlock Text="MotorYStep(px):" VerticalAlignment="Center"/>
+            <TextBox x:Name="MotorYStepTextBox" Width="50" VerticalAlignment="Center" Text="0,5"/>
+            <TextBlock Text="MotorYStep duration (ms):" VerticalAlignment="Center"/>
+            <TextBox x:Name="MotorYStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
             <Button Content="Apply Speed" Click="ApplySpeed_Click"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">

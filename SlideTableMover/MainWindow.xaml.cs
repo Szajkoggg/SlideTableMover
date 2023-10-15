@@ -16,11 +16,14 @@ namespace SlideTableMover
         private double motorY = 0;
         private double motorXCoordinate = 0;
         private double motorYCoordinate = 0;
-        private double motorStepSize = 0.3;  
+        private double motorXStepSize = 0.3;
+        private double motorYStepSize = 0.5;
         private int motorXDirection = 1;   // Motor X direction (1 for right, -1 for left)
         private int motorYDirection = 1;   // Motor Y direction (1 for down, -1 for up)
-        private int motorStepDurationms = 10;
-        private Timer motorTimer;
+        private int motorXStepDurationms = 10;
+        private int motorYStepDurationms = 10;
+        private Timer motorXTimer;
+        private Timer motorYTimer;
         private double targetX;
         private double targetY;
 
@@ -28,29 +31,64 @@ namespace SlideTableMover
         {
             InitializeComponent();
 
-            motorTimer = new Timer(motorStepDurationms);
-            motorTimer.Elapsed += MotorTimer_Elapsed;
-            motorTimer.AutoReset = true;
+            motorXTimer = new Timer(motorXStepDurationms);
+            motorXTimer.Elapsed += MotorXTimer_Elapsed;
+            motorXTimer.AutoReset = true;
+
+            motorYTimer = new Timer(motorYStepDurationms);
+            motorYTimer.Elapsed += MotorYTimer_Elapsed;
+            motorYTimer.AutoReset = true;
+
+            movingRectangle.Width = 50;
+            movingRectangle.Height = 50;
+        }
+        private void MotorYTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+
+            double deltaY = targetY - motorYCoordinate;
+
+            if (Math.Abs(deltaY) < motorYStepSize)
+            {
+                StopYMotor();
+                return;
+            }
+            motorYDirection = deltaY > 0 ? 1 : -1;
+
+            if (Math.Abs(deltaY) > motorYStepSize)
+            {
+                double newY = motorYCoordinate + motorYDirection * motorYStepSize;
+                Dispatcher.Invoke(() =>
+                {
+                    if (newY >= 0 && newY <= map.Height - movingRectangle.Height)
+                    {
+                        motorY = motorY + motorYDirection;
+                        motorYCoordinate = newY;
+                    }
+                });
+            }
+            Dispatcher.Invoke(() =>
+            {
+                currentY = Canvas.GetTop(movingRectangle);
+            });
+            MoveRectangleTo(motorYCoordinate, currentY, motorYStepDurationms, Canvas.TopProperty);
+            UpdateTextBoxes();
 
         }
-
-        private void MotorTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void MotorXTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
 
             double deltaX = targetX - motorXCoordinate;
-            double deltaY = targetY - motorYCoordinate;
 
-            if (Math.Abs(deltaX) < motorStepSize && Math.Abs(deltaY) < motorStepSize)
+            if (Math.Abs(deltaX) < motorXStepSize)
             {
-                StopMotor();
+                StopXMotor();
                 return;
             }
             motorXDirection = deltaX > 0 ? 1 : -1;
-            motorYDirection = deltaY > 0 ? 1 : -1;
 
-            if (Math.Abs(deltaX) > motorStepSize)
-                {
-                    double newX = motorXCoordinate + motorXDirection * motorStepSize;
+            if (Math.Abs(deltaX) > motorXStepSize)
+            {
+                double newX = motorXCoordinate + motorXDirection * motorXStepSize;
                 Dispatcher.Invoke(() =>
                 {
                     if (newX >= 0 && newX <= map.Width - movingRectangle.Width)
@@ -60,27 +98,17 @@ namespace SlideTableMover
                     }
 
                 });
-                }
-                if (Math.Abs(deltaY) > motorStepSize)
-                {
-                    double newY = motorYCoordinate + motorYDirection * motorStepSize;
-                Dispatcher.Invoke(() =>
-                {
-                    if (newY >= 0 && newY <= map.Height - movingRectangle.Height)
-                {
-                        motorY = motorY + motorYDirection;
-                        motorYCoordinate = newY;
-                    }
-                });
             }
             Dispatcher.Invoke(() =>
             {
                 currentX = Canvas.GetLeft(movingRectangle);
-                currentY = Canvas.GetTop(movingRectangle);
             });
-            MoveRectangleTo(motorXCoordinate, currentX, motorStepDurationms, Canvas.LeftProperty);
-            MoveRectangleTo(motorYCoordinate, currentY, motorStepDurationms, Canvas.TopProperty);
+            MoveRectangleTo(motorXCoordinate, currentX, motorXStepDurationms, Canvas.LeftProperty);
+            UpdateTextBoxes();
 
+        }
+        private void UpdateTextBoxes()
+        {
             Dispatcher.Invoke(() =>
             {
                 xPosTextBox.Text = motorX.ToString();
@@ -88,30 +116,50 @@ namespace SlideTableMover
                 currentXTextBox.Text = motorXCoordinate.ToString();
                 currentYTextBox.Text = motorYCoordinate.ToString();
             });
+        }
+        private void StartXMotor()
+        {
+            motorXTimer.Start();
+        }
+        private void StartYMotor()
+        {
+            motorYTimer.Start();
+        }
+        private void StopXMotor()
+        {
+            motorXTimer.Stop();
+        }
+        private void StopYMotor()
+        {
+            motorYTimer.Stop();
+        }
+        
+        private void StartMotors()
+        {
+            StartXMotor();
+            StartYMotor();
 
         }
-
-        private void StartMotor()
+        private void StopMotors()
         {
-            motorTimer.Start();
-
-        }
-        private void StopMotor()
-        {
-            motorTimer.Stop();
+            StopXMotor();
+            StopYMotor();
         }
        
 
         private void ApplySpeed_Click(object sender, RoutedEventArgs e)
         {
             
-            if (double.TryParse(MotorstepTextBox.Text, out double newMotorStepSize) && double.TryParse(MotorstepDurationTextBox.Text, out double newMotorStepDurationms))
+            if (double.TryParse(MotorXStepTextBox.Text, out double newMotorXStepSize) && double.TryParse(MotorXStepDurationTextBox.Text, out double newMotorXStepDurationms) && double.TryParse(MotorYStepTextBox.Text, out double newMotorYStepSize) && double.TryParse(MotorYStepDurationTextBox.Text, out double newMotorYStepDurationms))
             {
-                StopMotor();
-                MessageBox.Show("Motorstep updated.");
-                motorStepSize = Math.Max(0, newMotorStepSize);
-                motorStepDurationms = (int) Math.Max(0, newMotorStepDurationms);
-                motorTimer.Interval = motorStepDurationms;
+                StopMotors();
+                MessageBox.Show("Motorsteps updated.");
+                motorXStepSize = Math.Max(0, newMotorXStepSize);
+                motorXStepDurationms = (int) Math.Max(0, newMotorXStepDurationms);
+                motorXTimer.Interval = motorXStepDurationms;
+                motorYStepSize = Math.Max(0, newMotorYStepSize);
+                motorYStepDurationms = (int)Math.Max(0, newMotorYStepDurationms);
+                motorYTimer.Interval = motorYStepDurationms;
             }
             else
             {
@@ -121,14 +169,14 @@ namespace SlideTableMover
 
         private void ApplyCoordinates_Click(object sender, RoutedEventArgs e)
         {
-            StopMotor();
+            StopMotors();
 
             if (double.TryParse(newXTextBox.Text, out double newX) && double.TryParse(newYTextBox.Text, out double newY))
             {
                 targetX = newX;
                 targetY = newY;
 
-                StartMotor();
+                StartMotors();
             }
             else
             {
@@ -138,14 +186,14 @@ namespace SlideTableMover
 
         private void ApplyPositions_Click(object sender, RoutedEventArgs e)
         {
-            StopMotor();
+            StopMotors();
 
             if (double.TryParse(newXPosTextBox.Text, out double newX) && double.TryParse(newYPosTextBox.Text, out double newY))
             {
-                targetX = newX*motorStepSize;
-                targetY = newY*motorStepSize;
+                targetX = newX*motorXStepSize;
+                targetY = newY*motorYStepSize;
 
-                StartMotor();
+                StartMotors();
             }
             else
             {
@@ -155,12 +203,12 @@ namespace SlideTableMover
 
         private void WorkPane_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            StopMotor();
+            StopMotors();
 
             targetX = e.GetPosition(canvas).X - movingRectangle.ActualWidth / 2;
             targetY = e.GetPosition(canvas).Y - movingRectangle.ActualHeight / 2;
-            
-            StartMotor();
+
+            StartMotors();
         }
 
         private void MoveRectangleTo(double newCoordinate, double currentCoordinate, double animationDuration, DependencyProperty canvasProperty)
