@@ -48,12 +48,12 @@
             <Button Content="Apply Positions" Click="ApplyPositions_Click" Margin="10,0,0,0"/>
         </StackPanel>
         <Canvas Grid.Row="3" Name="canvas" Width="800" Height="450">
-            <Rectangle Name="map" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
+            <Rectangle Name="workAreaElement" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
             <!-- X and Y axes -->
             <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>
             <Line X1="400" Y1="0" X2="400" Y2="450" Stroke="Black" StrokeThickness="2"/>
             <!-- Rectangle -->
-            <Rectangle Name="movingRectangle"  Width="50" Height="50" Fill="Blue" Canvas.Left="0" Canvas.Top="0"/>
+            <Rectangle Name="slideTableElement"  Width="50" Height="50" Fill="Blue" Canvas.Left="0" Canvas.Top="0"/>
         </Canvas>
     </Grid>
 </Window>
