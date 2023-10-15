@@ -14,50 +14,81 @@ namespace SlideTableMover
         private double ySpeed = 100;
         private double motorX = 0;         // Motor X position
         private double motorY = 0;         // Motor Y position
-        private double motorStepSize = 5;  // Size of each motor step
+        private double motorStepSize = 2;  // Size of each motor step
         private int motorXDirection = 1;   // Motor X direction (1 for right, -1 for left)
         private int motorYDirection = 1;   // Motor Y direction (1 for down, -1 for up)
-        private int motorXInterval = 100;  // Interval for X motor timer (milliseconds)
-        private int motorYInterval = 100;  // Interval for Y motor timer (milliseconds)
-        private Timer motorXTimer;         // Timer for X motor
-        private Timer motorYTimer;         // Timer for Y motor
+        private int motorInterval = 100;
+        private Timer motorTimer;
+        private double targetX;
+        private double targetY;
+        private bool isAnimationInProgress = false;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            motorXTimer = new Timer(motorXInterval);
-            motorXTimer.Elapsed += MotorXTimer_Elapsed;
+            motorTimer = new Timer(motorInterval);
+            motorTimer.Elapsed += MotorTimer_Elapsed;
+            motorTimer.AutoReset = true;
 
-            motorYTimer = new Timer(motorYInterval);
-            motorYTimer.Elapsed += MotorYTimer_Elapsed;
-
-            motorXTimer.Start();
-            motorYTimer.Start();
         }
 
-        private void MotorXTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private void MotorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            motorX += motorXDirection * motorStepSize;
-            MoveRectangleTo(motorX, motorY);
-        }
+            if (!isAnimationInProgress)
+            {
+               // isAnimationInProgress = true;
+               
+            double deltaX = targetX - motorX;
+            double deltaY = targetY - motorY;
 
-        private void MotorYTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            motorY += motorYDirection * motorStepSize;
-            MoveRectangleTo(motorX, motorY);
-        }
-        private void StartMotors()
-        {
-            motorXTimer.Start();
-            motorYTimer.Start();
-        }
+            if (Math.Abs(deltaX) < motorStepSize && Math.Abs(deltaY) < motorStepSize)
+            {
+                StopMotor();
+                return;
+            }
 
-        private void StopMotors()
-        {
-            motorXTimer.Stop();
-            motorYTimer.Stop();
+                if (deltaX > 0)
+                {
+                    motorXDirection = 1;
+                }
+                else
+                {
+                    motorXDirection = -1;
+                }
+                if (deltaY > 0)
+                {
+                    motorYDirection = 1;
+                }
+                else
+                {
+                    motorYDirection = -1;
+                }
+                if (Math.Abs(deltaX) > motorStepSize)
+                {
+                    motorX = motorX + motorXDirection * motorStepSize;
+                }
+                if (Math.Abs(deltaY) > motorStepSize)
+                {
+                    motorY = motorY + motorYDirection * motorStepSize;
+                }
+                double duration = motorInterval / motorStepSize;
+                MoveRectangleTo(motorX, motorY, duration);
+                
+            }
         }
+        
+
+        private void StartMotor()
+        {
+            motorTimer.Start();
+
+        }
+        private void StopMotor()
+        {
+            motorTimer.Stop();
+        }
+       
 
         private void ApplySpeed_Click(object sender, RoutedEventArgs e)
         {
@@ -76,9 +107,11 @@ namespace SlideTableMover
 
         private void ApplyCoordinates_Click(object sender, RoutedEventArgs e)
         {
+            StopMotor();
+
             if (double.TryParse(newXTextBox.Text, out double newX) && double.TryParse(newYTextBox.Text, out double newY))
             {
-                MoveRectangleTo(newX, newY);
+                MoveRectangleTo(newX, newY, 5);
             }
             else
             {
@@ -86,7 +119,7 @@ namespace SlideTableMover
             }
         }
 
-        private void MoveRectangleTo(double newX, double newY)
+        private void MoveRectangleTo(double newX, double newY, double animationDuration)
         {
             double currentX = 0;
             double currentY = 0;
@@ -99,16 +132,27 @@ namespace SlideTableMover
 
             double deltaX = newX - currentX;
             double deltaY = newY - currentY;
+            bool xAnimationComplete = false;
+            bool yAnimationComplete = false;
 
-            double xDuration = Math.Abs(deltaX) / xSpeed;
-            double yDuration = Math.Abs(deltaY) / ySpeed;
-
-            
-            // Use Dispatcher.Invoke to update UI elements from a background thread
             Dispatcher.Invoke(() =>
             {
-                DoubleAnimation xAnimation = new DoubleAnimation(newX, TimeSpan.FromSeconds(xDuration));
-                DoubleAnimation yAnimation = new DoubleAnimation(newY, TimeSpan.FromSeconds(yDuration));
+                DoubleAnimation xAnimation = new DoubleAnimation(newX, TimeSpan.FromMilliseconds(animationDuration));
+                DoubleAnimation yAnimation = new DoubleAnimation(newY, TimeSpan.FromMilliseconds(animationDuration));
+                
+                /*
+                xAnimation.Completed += (s, e) =>
+                {
+                    xAnimationComplete = true;
+                };
+                yAnimation.Completed += (s, e) =>
+                {
+                    yAnimationComplete = true; 
+                };
+                if (xAnimationComplete && yAnimationComplete)
+                {
+                    isAnimationInProgress = false;
+                }*/
                 movingRectangle.BeginAnimation(Canvas.LeftProperty, xAnimation);
                 movingRectangle.BeginAnimation(Canvas.TopProperty, yAnimation);
                 currentXTextBox.Text = newX.ToString();
@@ -118,10 +162,12 @@ namespace SlideTableMover
 
         private void WorkPane_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            double xClicked = e.GetPosition(canvas).X - movingRectangle.ActualWidth / 2;
-            double yClicked = e.GetPosition(canvas).Y - movingRectangle.ActualHeight / 2;
+            StopMotor();
 
-            MoveRectangleTo(xClicked, yClicked);
+            targetX = e.GetPosition(canvas).X - movingRectangle.ActualWidth / 2;
+            targetY = e.GetPosition(canvas).Y - movingRectangle.ActualHeight / 2;
+            
+            StartMotor();
         }
     }
 }
