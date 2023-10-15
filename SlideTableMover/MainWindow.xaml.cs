@@ -14,6 +14,8 @@ namespace SlideTableMover
         double currentY = 0;
         private double motorX = 0;
         private double motorY = 0;
+        private double motorXCoordinate = 0;
+        private double motorYCoordinate = 0;
         private double motorStepSize = 0.3;  
         private int motorXDirection = 1;   // Motor X direction (1 for right, -1 for left)
         private int motorYDirection = 1;   // Motor Y direction (1 for down, -1 for up)
@@ -34,8 +36,6 @@ namespace SlideTableMover
 
         private void MotorTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            double motorXCoordinate = motorX * motorStepSize;
-            double motorYCoordinate = motorY * motorStepSize;
 
             double deltaX = targetX - motorXCoordinate;
             double deltaY = targetY - motorYCoordinate;
@@ -73,15 +73,23 @@ namespace SlideTableMover
                     }
                 });
             }
-                MoveRectangleTo(motorXCoordinate, motorYCoordinate, motorStepDurationms);
+            Dispatcher.Invoke(() =>
+            {
+                currentX = Canvas.GetLeft(movingRectangle);
+                currentY = Canvas.GetTop(movingRectangle);
+            });
+            MoveRectangleTo(motorXCoordinate, currentX, motorStepDurationms, Canvas.LeftProperty);
+            MoveRectangleTo(motorYCoordinate, currentY, motorStepDurationms, Canvas.TopProperty);
+
             Dispatcher.Invoke(() =>
             {
                 xPosTextBox.Text = motorX.ToString();
                 yPosTextBox.Text = motorY.ToString();
+                currentXTextBox.Text = motorXCoordinate.ToString();
+                currentYTextBox.Text = motorYCoordinate.ToString();
             });
 
         }
-        
 
         private void StartMotor()
         {
@@ -154,29 +162,16 @@ namespace SlideTableMover
             
             StartMotor();
         }
-        private void MoveRectangleTo(double newX, double newY, double animationDuration)
+
+        private void MoveRectangleTo(double newCoordinate, double currentCoordinate, double animationDuration, DependencyProperty canvasProperty)
         {
+            double delta = newCoordinate - currentCoordinate;
 
             Dispatcher.Invoke(() =>
             {
-                currentX = Canvas.GetLeft(movingRectangle);
-                currentY = Canvas.GetTop(movingRectangle);
-            });
-
-            double deltaX = newX - currentX;
-            double deltaY = newY - currentY;
-
-            Dispatcher.Invoke(() =>
-            {
-                DoubleAnimation xAnimation = new DoubleAnimation(newX, TimeSpan.FromMilliseconds(animationDuration));
-                DoubleAnimation yAnimation = new DoubleAnimation(newY, TimeSpan.FromMilliseconds(animationDuration));
-
-                movingRectangle.BeginAnimation(Canvas.LeftProperty, xAnimation);
-                movingRectangle.BeginAnimation(Canvas.TopProperty, yAnimation);
-                currentXTextBox.Text = newX.ToString();
-                currentYTextBox.Text = newY.ToString();
+                DoubleAnimation animation = new DoubleAnimation(newCoordinate, TimeSpan.FromMilliseconds(animationDuration));
+                movingRectangle.BeginAnimation(canvasProperty, animation);
             });
         }
-
     }
 }
