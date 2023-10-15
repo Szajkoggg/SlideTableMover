@@ -10,14 +10,12 @@ namespace SlideTableMover
 
     public partial class MainWindow : Window
     {
-        private double xSpeed = 50;
-        private double ySpeed = 100;
         private double motorX = 0;         // Motor X position
         private double motorY = 0;         // Motor Y position
-        private double motorStepSize = 2;  // Size of each motor step
+        private double motorStepSize = 0.3;  // Size of each motor step
         private int motorXDirection = 1;   // Motor X direction (1 for right, -1 for left)
         private int motorYDirection = 1;   // Motor Y direction (1 for down, -1 for up)
-        private int motorInterval = 100;
+        private int motorStepDurationms = 10;
         private Timer motorTimer;
         private double targetX;
         private double targetY;
@@ -27,7 +25,7 @@ namespace SlideTableMover
         {
             InitializeComponent();
 
-            motorTimer = new Timer(motorInterval);
+            motorTimer = new Timer(motorStepDurationms);
             motorTimer.Elapsed += MotorTimer_Elapsed;
             motorTimer.AutoReset = true;
 
@@ -72,8 +70,7 @@ namespace SlideTableMover
                 {
                     motorY = motorY + motorYDirection * motorStepSize;
                 }
-                double duration = motorInterval / motorStepSize;
-                MoveRectangleTo(motorX, motorY, duration);
+                MoveRectangleTo(motorX, motorY, motorStepDurationms);
                 
             }
         }
@@ -92,16 +89,17 @@ namespace SlideTableMover
 
         private void ApplySpeed_Click(object sender, RoutedEventArgs e)
         {
-            if (double.TryParse(xSpeedTextBox.Text, out double newXSpeed) && double.TryParse(ySpeedTextBox.Text, out double newYSpeed))
+            if (double.TryParse(MotorstepTextBox.Text, out double newMotorStepSize) && double.TryParse(MotorstepDurationTextBox.Text, out double newMotorStepDurationms))
             {
-                MessageBox.Show("Speed updated.");
-                xSpeed = Math.Max(0, newXSpeed);
-                ySpeed = Math.Max(0, newYSpeed);
+                MessageBox.Show("Motorstep updated.");
+                motorStepSize = Math.Max(0, newMotorStepSize);
+                motorStepDurationms = (int) Math.Max(0, newMotorStepDurationms);
+                motorTimer.Interval = motorStepDurationms;
 
             }
             else
             {
-                MessageBox.Show("Invalid speed values. Please enter valid numbers.");
+                MessageBox.Show("Invalid step values. Please enter valid numbers.");
             }
         }
 
