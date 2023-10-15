@@ -12,6 +12,7 @@
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
@@ -47,7 +48,14 @@
             <TextBox x:Name="newYPosTextBox" Width="50" VerticalAlignment="Center"/>
             <Button Content="Apply Positions" Click="ApplyPositions_Click" Margin="10,0,0,0"/>
         </StackPanel>
-        <Canvas Grid.Row="3" Name="canvas" Width="800" Height="450">
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button Content="X+" Click="MoveXPlusButton_MouseDown"  IsEnabled="True"/>
+            <Button Content="X-" MouseDown="MoveXMinusButton_MouseDown" MouseUp="MoveXMotorButton_MouseUp" IsEnabled="True"/>
+            <Button Content="Y+" MouseDown="MoveYPlusButton_MouseDown"  MouseUp="MoveYMotorButton_MouseUp" IsEnabled="True"/>
+            <Button Content="Y-" MouseDown="MoveXMinusButton_MouseDown" MouseUp="MoveYMotorButton_MouseUp" IsEnabled="True" />
+            <Button Content="Stop" Click="Button_Click" IsEnabled="True" />
+         </StackPanel>
+            <Canvas Grid.Row="4" Name="canvas" Width="800" Height="450">
             <Rectangle Name="workAreaElement" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
             <!-- X and Y axes -->
             <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>

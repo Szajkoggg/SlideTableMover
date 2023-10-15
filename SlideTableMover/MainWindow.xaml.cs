@@ -17,6 +17,7 @@ namespace SlideTableMover
         private MovementService movementService;
         private SlideTable slideTable;
         private WorkArea workArea;
+        private bool isMotorRunning = false;
 
 
         public MainWindow()
@@ -105,6 +106,52 @@ namespace SlideTableMover
             motorY.target = e.GetPosition(canvas).Y - slideTableElement.ActualHeight / 2;
 
             StartMotors();
+        }
+        private void MoveXPlusButton_MouseDown(object sender, RoutedEventArgs e)
+        {
+            if(!isMotorRunning)
+            {
+                motorX.target = workArea.width;
+                StartMotors();
+                isMotorRunning = true;
+            }
+            
+        }
+        private void MoveXMinusButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            MessageBox.Show("Hallo");
+            if (!isMotorRunning)
+            {
+                motorX.target = 0;
+                StartMotors();
+                isMotorRunning = true;
+            }
+        }
+        private void MoveXMotorButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            motorX.Stop();
+            isMotorRunning = false;
+        }
+        private void MoveYPlusButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            motorY.target = workArea.height;
+            motorY.Start();
+        }
+        private void MoveYMinusButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+            motorY.target = 0;
+            motorY.Start();
+        }
+        private void MoveYMotorButton_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            motorY.Stop();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StopMotors();
         }
     }
 }
