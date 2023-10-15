@@ -45,32 +45,33 @@ namespace SlideTableMover
                 StopMotor();
                 return;
             }
+            motorXDirection = deltaX > 0 ? 1 : -1;
+            motorYDirection = deltaY > 0 ? 1 : -1;
 
-                if (deltaX > 0)
+            if (Math.Abs(deltaX) > motorStepSize)
                 {
-                    motorXDirection = 1;
-                }
-                else
+                    double newX = motorXCoordinate + motorXDirection * motorStepSize;
+                Dispatcher.Invoke(() =>
                 {
-                    motorXDirection = -1;
-                }
-                if (deltaY > 0)
-                {
-                    motorYDirection = 1;
-                }
-                else
-                {
-                    motorYDirection = -1;
-                }
-                if (Math.Abs(deltaX) > motorStepSize)
-                {
-                    motorXCoordinate = motorXCoordinate + motorXDirection * motorStepSize;
-                    motorX = motorX + motorXDirection;
+                    if (newX >= 0 && newX <= map.Width - movingRectangle.Width)
+                    {
+                        motorX = motorX + motorXDirection;
+                        motorXCoordinate = newX;
+                    }
+
+                });
                 }
                 if (Math.Abs(deltaY) > motorStepSize)
                 {
-                    motorYCoordinate = motorYCoordinate + motorYDirection * motorStepSize;
-                    motorY = motorY + motorYDirection;
+                    double newY = motorYCoordinate + motorYDirection * motorStepSize;
+                Dispatcher.Invoke(() =>
+                {
+                    if (newY >= 0 && newY <= map.Height - movingRectangle.Height)
+                {
+                        motorY = motorY + motorYDirection;
+                        motorYCoordinate = newY;
+                    }
+                });
             }
                 MoveRectangleTo(motorXCoordinate, motorYCoordinate, motorStepDurationms);
                 
@@ -91,13 +92,14 @@ namespace SlideTableMover
 
         private void ApplySpeed_Click(object sender, RoutedEventArgs e)
         {
+            
             if (double.TryParse(MotorstepTextBox.Text, out double newMotorStepSize) && double.TryParse(MotorstepDurationTextBox.Text, out double newMotorStepDurationms))
             {
+                StopMotor();
                 MessageBox.Show("Motorstep updated.");
                 motorStepSize = Math.Max(0, newMotorStepSize);
                 motorStepDurationms = (int) Math.Max(0, newMotorStepDurationms);
                 motorTimer.Interval = motorStepDurationms;
-
             }
             else
             {
