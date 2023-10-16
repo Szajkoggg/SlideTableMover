@@ -35,6 +35,8 @@
             <TextBox x:Name="newXTextBox" Width="50" VerticalAlignment="Center"/>
             <TextBlock Text="New Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox x:Name="newYTextBox" Width="50" VerticalAlignment="Center"/>
+            <TextBlock Text="New Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="newZTextBox" Width="50" VerticalAlignment="Center"/>
             <Button Content="Apply Coordinates" Click="ApplyCoordinates_Click" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
@@ -42,10 +44,14 @@
             <TextBox x:Name="xPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="YPos:" VerticalAlignment="Center"/>
             <TextBox x:Name="yPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
+            <TextBlock Text="zPos:" VerticalAlignment="Center"/>
+            <TextBox x:Name="zPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="New XPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox x:Name="newXPosTextBox" Width="50" VerticalAlignment="Center"/>
             <TextBlock Text="New YPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
             <TextBox x:Name="newYPosTextBox" Width="50" VerticalAlignment="Center"/>
+            <TextBlock Text="New ZPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <TextBox x:Name="newZPosTextBox" Width="50" VerticalAlignment="Center"/>
             <Button Content="Apply Positions" Click="ApplyPositions_Click" Margin="10,0,0,0"/>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal">

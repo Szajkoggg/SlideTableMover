@@ -6,18 +6,19 @@ namespace SlideTableMover.Model
 {
     public class SlideTable
     {
-        public int height;
-        public int width;
+        public int xSize;
+        public int ySize;
         public double xCoordinate = 0;
         public double yCoordinate = 0;
+        public double zCoordinate = 0;
         public UIElement element;
         public TextBox xCoordinateTextBox;
         public TextBox yCoordinateTextBox;
 
-        public SlideTable(int height, int width, UIElement element, TextBox xCoordinateTextBox, TextBox yCoordinateTextBox)
+        public SlideTable(int ySize, int xSize, UIElement element, TextBox xCoordinateTextBox, TextBox yCoordinateTextBox)
         {
-            this.height = height;
-            this.width = width;
+            this.ySize = ySize;
+            this.xSize = xSize;
             this.element = element;
             this.xCoordinateTextBox = xCoordinateTextBox;
             this.yCoordinateTextBox = yCoordinateTextBox;
@@ -27,11 +28,11 @@ namespace SlideTableMover.Model
         {
             if (axis == Axis.X)
             {
-                return width;
+                return xSize;
             }
             if (axis == Axis.Y)
             {
-                return height;
+                return ySize;
             }
             return 0;
         }

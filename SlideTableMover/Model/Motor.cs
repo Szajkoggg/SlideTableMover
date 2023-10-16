@@ -7,7 +7,7 @@ namespace SlideTableMover.Model
     public class Motor
     {
         private double currentPosition = 0;
-        private double currentCoordinate = 0;
+        public double currentCoordinate = 0;
         public double stepSize;
         public int stepDurationMs;
         private int direction = 1;

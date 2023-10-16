@@ -2,17 +2,21 @@
 {
     public class WorkArea
     {
-        public int height;
-        public int width;
-        public WorkArea(int height, int width) { this.height = height; this.width = width; }
+        public int xSize;
+        public int ySize;
+        public int zSize;
+        public WorkArea(int ySize, int xSize, int zSize) { this.ySize = ySize; this.xSize = xSize; this.zSize = zSize; }
         public int maxValueOnAxis(Axis axis)
         {
-            if(axis.Equals(Axis.X))
+            if(axis == (Axis.X))
             {
-                return width;
-            }if(axis.Equals(Axis.Y))
+                return xSize;
+            }if(axis == (Axis.Y))
             {
-                return height;
+                return ySize;
+            }if(axis == Axis.Z) 
+            { 
+                return zSize;
             }
             return 0;
         }
