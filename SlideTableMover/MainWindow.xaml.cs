@@ -34,6 +34,17 @@ namespace SlideTableMover
 
             slideTableElement.Width = slideTable.xSize;
             slideTableElement.Height = slideTable.ySize;
+            workAreaElement.Width = workArea.xSize;
+            workAreaElement.Height = workArea.ySize;
+            workAreaBackground.Width = workArea.xSize;
+            workAreaBackground.Height = workArea.ySize;
+            canvas.Width = workArea.xSize;
+            canvas.Height = workArea.ySize;
+            xAxis.Y1 = workArea.ySize / 2;
+            xAxis.Y2 = workArea.ySize / 2;
+            yAxis.X1 = workArea.xSize / 2;
+            yAxis.X2 = workArea.xSize / 2;
+            yAxis.Y2 = workArea.ySize;
 
             MessageBox.Show("I recommend keeping Z values at 0, as the Z axis is not fully implemented, but you can experiment with it");
         }
