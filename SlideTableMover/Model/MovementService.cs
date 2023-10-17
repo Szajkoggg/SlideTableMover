@@ -51,8 +51,9 @@ namespace SlideTableMover.Model
             {
                 double newXSize = slideTable.xSize * (1 + newCoordinate / workArea.zSize);
                 double newYSize = slideTable.ySize * (1 + newCoordinate / workArea.zSize);
-
+                slideTable.zCoordinate = newCoordinate;
                 ResizeSlideTable(newXSize, newYSize, animationDuration);
+                updateSlideTableCoordinateTextBox();
             }
            
         }

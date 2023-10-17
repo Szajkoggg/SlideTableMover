@@ -19,14 +19,13 @@ namespace SlideTableMover
         private MovementService movementService;
         private SlideTable slideTable;
         private WorkArea workArea;
-        private bool isMotorRunning = false;
 
 
         public MainWindow()
         {;
             InitializeComponent();
             workArea = new WorkArea(450, 800, 100);
-            slideTable = new SlideTable(50, 50, slideTableElement, currentXTextBox, currentYTextBox);
+            slideTable = new SlideTable(50, 50, slideTableElement, currentXTextBox, currentYTextBox, currentZTextBox);
             movementService = new MovementService(slideTable, workArea, Dispatcher, this);
 
             motorX = new Motor(0.3, 10, Axis.X, movementService, xPosTextBox);
@@ -35,6 +34,8 @@ namespace SlideTableMover
 
             slideTableElement.Width = slideTable.xSize;
             slideTableElement.Height = slideTable.ySize;
+
+            MessageBox.Show("I recommend keeping Z values at 0, as the Z axis is not fully implemented, but you can experiment with it");
         }
         
         
@@ -56,13 +57,14 @@ namespace SlideTableMover
         private void ApplySpeed_Click(object sender, RoutedEventArgs e)
         {
             
-            if (double.TryParse(MotorXStepTextBox.Text, out double newMotorXStepSize) && double.TryParse(MotorXStepDurationTextBox.Text, out double newMotorXStepDurationms) && double.TryParse(MotorYStepTextBox.Text, out double newMotorYStepSize) && double.TryParse(MotorYStepDurationTextBox.Text, out double newMotorYStepDurationms))
+            if (double.TryParse(MotorXStepTextBox.Text, out double newMotorXStepSize) && double.TryParse(MotorXStepDurationTextBox.Text, out double newMotorXStepDurationms) && double.TryParse(MotorYStepTextBox.Text, out double newMotorYStepSize) && double.TryParse(MotorYStepDurationTextBox.Text, out double newMotorYStepDurationms) && double.TryParse(MotorZStepTextBox.Text, out double newMotorZStepSize) && double.TryParse(MotorZStepDurationTextBox.Text, out double newMotorZStepDurationms))
             {
 
                 StopMotors();
                 CheckCurrentCoordinates();
                 motorX.updateSizeAndDuration(newMotorXStepSize, newMotorXStepDurationms);
-                motorY.updateSizeAndDuration(newMotorYStepSize, newMotorYStepDurationms);
+                motorY.updateSizeAndDuration(newMotorYStepSize, newMotorYStepDurationms); 
+                motorZ.updateSizeAndDuration(newMotorZStepSize, newMotorYStepDurationms);
                 MessageBox.Show("Motorsteps updated.");
             }
             else
@@ -93,11 +95,12 @@ namespace SlideTableMover
         {
             StopMotors();
 
-            if (double.TryParse(newXPosTextBox.Text, out double newX) && double.TryParse(newYPosTextBox.Text, out double newY))
+            if (double.TryParse(newXPosTextBox.Text, out double newX) && double.TryParse(newYPosTextBox.Text, out double newY) && double.TryParse(newZPosTextBox.Text, out double newZ))
             {
                 CheckCurrentCoordinates();
                 motorX.target = newX*motorX.stepSize;
                 motorY.target = newY*motorY.stepSize;
+                motorZ.target = newY*motorZ.stepSize;
                 StartMotors();
             }
             else
@@ -126,49 +129,49 @@ namespace SlideTableMover
             motorX.currentCoordinate = slideTable.xCoordinate;
             motorY.currentCoordinate = slideTable.yCoordinate;
         }
-        private void MoveXPlusButton_MouseDown(object sender, RoutedEventArgs e)
+        private void MoveXPlusButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!isMotorRunning)
-            {
-                motorX.target = workArea.xSize;
-                StartMotors();
-                isMotorRunning = true;
-            }
+            StopMotors();
+            motorX.target = workArea.xSize;
+            motorX.Start();
+
             
         }
-        private void MoveXMinusButton_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MoveXMinusButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Hallo");
-            if (!isMotorRunning)
-            {
-                motorX.target = 0;
-                StartMotors();
-                isMotorRunning = true;
-            }
+            StopMotors();
+            motorX.target = 0;
+            motorX.Start();
+
         }
-        private void MoveXMotorButton_MouseUp(object sender, MouseButtonEventArgs e)
+
+        private void MoveYPlusButton_Click(object sender, RoutedEventArgs e)
         {
-            motorX.Stop();
-            isMotorRunning = false;
-        }
-        private void MoveYPlusButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            
+            StopMotors();
             motorY.target = workArea.ySize;
             motorY.Start();
         }
-        private void MoveYMinusButton_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MoveYMinusButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            StopMotors();
             motorY.target = 0;
             motorY.Start();
         }
-        private void MoveYMotorButton_MouseUp(object sender, MouseButtonEventArgs e)
+        private void MoveZPlusButton_Click(object sender, RoutedEventArgs e)
         {
-            motorY.Stop();
+            StopMotors();
+            motorZ.target = workArea.zSize;
+            motorZ.Start();
+        }
+        private void MoveZMinusButton_Click(object sender, RoutedEventArgs e)
+        {
+            StopMotors();
+            motorZ.target = 0;
+            motorZ.Start();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
         {
             StopMotors();
         }

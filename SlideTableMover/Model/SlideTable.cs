@@ -14,14 +14,16 @@ namespace SlideTableMover.Model
         public UIElement element;
         public TextBox xCoordinateTextBox;
         public TextBox yCoordinateTextBox;
+        public TextBox zCoordinateTextBox;
 
-        public SlideTable(int ySize, int xSize, UIElement element, TextBox xCoordinateTextBox, TextBox yCoordinateTextBox)
+        public SlideTable(int ySize, int xSize, UIElement element, TextBox xCoordinateTextBox, TextBox yCoordinateTextBox, TextBox zCoordinateTextBox)
         {
             this.ySize = ySize;
             this.xSize = xSize;
             this.element = element;
             this.xCoordinateTextBox = xCoordinateTextBox;
             this.yCoordinateTextBox = yCoordinateTextBox;
+            this.zCoordinateTextBox = zCoordinateTextBox;
         }
 
         public int maxValueOnAxis(Axis axis)
@@ -42,6 +44,7 @@ namespace SlideTableMover.Model
             {
                 xCoordinateTextBox.Text = xCoordinate.ToString();
                 yCoordinateTextBox.Text = yCoordinate.ToString();
+                zCoordinateTextBox.Text = zCoordinate.ToString();
             });
             }
     }

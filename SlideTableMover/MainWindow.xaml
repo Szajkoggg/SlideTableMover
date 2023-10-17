@@ -5,69 +5,144 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SlideTableMover"
         mc:Ignorable="d"
-       Title="Slide Table Mover" Height="575" Width="800">
+       Title="Slide Table Mover" Height="550" Width="1025">
     <Grid>
+        
         <!-- Header Row -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="25"/>
             <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <TextBlock Text="MotorXStep(px):" VerticalAlignment="Center"/>
-            <TextBox x:Name="MotorXStepTextBox" Width="50" VerticalAlignment="Center" Text="0,3"/>
-            <TextBlock Text="MotorXStep duration (ms):" VerticalAlignment="Center"/>
-            <TextBox x:Name="MotorXStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
-            <TextBlock Text="MotorYStep(px):" VerticalAlignment="Center"/>
-            <TextBox x:Name="MotorYStepTextBox" Width="50" VerticalAlignment="Center" Text="0,5"/>
-            <TextBlock Text="MotorYStep duration (ms):" VerticalAlignment="Center"/>
-            <TextBox x:Name="MotorYStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
-            <Button Content="Apply Speed" Click="ApplySpeed_Click"/>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock Text="X Coord:" VerticalAlignment="Center"/>
             <TextBox x:Name="currentXTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="Y Coord:" VerticalAlignment="Center"/>
             <TextBox x:Name="currentYTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
-            <TextBlock Text="New X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="newXTextBox" Width="50" VerticalAlignment="Center"/>
-            <TextBlock Text="New Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="newYTextBox" Width="50" VerticalAlignment="Center"/>
-            <TextBlock Text="New Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="newZTextBox" Width="50" VerticalAlignment="Center"/>
-            <Button Content="Apply Coordinates" Click="ApplyCoordinates_Click" Margin="10,0,0,0"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="Z Coord:" VerticalAlignment="Center"/>
+            <TextBox x:Name="currentZTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="XPos:" VerticalAlignment="Center"/>
             <TextBox x:Name="xPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="YPos:" VerticalAlignment="Center"/>
             <TextBox x:Name="yPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
             <TextBlock Text="zPos:" VerticalAlignment="Center"/>
             <TextBox x:Name="zPosTextBox" Width="50" VerticalAlignment="Center" Text="0"/>
-            <TextBlock Text="New XPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="newXPosTextBox" Width="50" VerticalAlignment="Center"/>
-            <TextBlock Text="New YPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="newYPosTextBox" Width="50" VerticalAlignment="Center"/>
-            <TextBlock Text="New ZPos:" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <TextBox x:Name="newZPosTextBox" Width="50" VerticalAlignment="Center"/>
-            <Button Content="Apply Positions" Click="ApplyPositions_Click" Margin="10,0,0,0"/>
         </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
-            <Button Content="X+" Click="MoveXPlusButton_MouseDown"  IsEnabled="True"/>
-            <Button Content="X-" MouseDown="MoveXMinusButton_MouseDown" MouseUp="MoveXMotorButton_MouseUp" IsEnabled="True"/>
-            <Button Content="Y+" MouseDown="MoveYPlusButton_MouseDown"  MouseUp="MoveYMotorButton_MouseUp" IsEnabled="True"/>
-            <Button Content="Y-" MouseDown="MoveXMinusButton_MouseDown" MouseUp="MoveYMotorButton_MouseUp" IsEnabled="True" />
-            <Button Content="Stop" Click="Button_Click" IsEnabled="True" />
-         </StackPanel>
-            <Canvas Grid.Row="4" Name="canvas" Width="800" Height="450">
-            <Rectangle Name="workAreaElement" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
-            <!-- X and Y axes -->
-            <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>
-            <Line X1="400" Y1="0" X2="400" Y2="450" Stroke="Black" StrokeThickness="2"/>
-            <!-- Rectangle -->
-            <Rectangle Name="slideTableElement"  Width="50" Height="50" Fill="Blue" Canvas.Left="0" Canvas.Top="0"/>
-        </Canvas>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="800"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!-- Draw area -->
+            <Canvas Grid.Column="0" Name="canvas" Width="800" Height="450">
+                <Rectangle Name="workAreaElement" Width="800" Height="450" Fill="Transparent" MouseDown="WorkPane_MouseDown" Canvas.Top="0" Panel.ZIndex="10"/>
+                <Rectangle Name="workAreaBackground" Width="800" Height="450" Fill="Gray" MouseDown="WorkPane_MouseDown" Canvas.Top="0" />
+                <!-- X and Y axes -->
+                <Line X1="0" Y1="225" X2="800" Y2="225" Stroke="Black" StrokeThickness="2"/>
+                <Line X1="400" Y1="0" X2="400" Y2="450" Stroke="Black" StrokeThickness="2"/>
+                <!-- Rectangle -->
+                <Rectangle Name="slideTableElement"  Width="50" Height="50" Fill="Blue" Canvas.Left="0" Canvas.Top="0"/>
+            </Canvas>
+            <!-- Control panel-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="125"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Set coordinates -->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Name="tbSetCoordinates" Text="Set coordinates" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="newXTextBox" Width="50" VerticalAlignment="Center"/>
+                        <TextBlock Text="Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="newYTextBox" Width="50" VerticalAlignment="Center"/>
+                        <TextBlock Text="Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="newZTextBox" Width="50" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Row="2" Content="Apply Coordinates" Click="ApplyCoordinates_Click" HorizontalAlignment="Center"/>
+                </Grid>
+                <!-- Set positions -->
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Name="tbSetPositions" Text="Set positions" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="newXPosTextBox" Width="50" VerticalAlignment="Center"/>
+                        <TextBlock Text="Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="newYPosTextBox" Width="50" VerticalAlignment="Center"/>
+                        <TextBlock Text="Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="newZPosTextBox" Width="50" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <Button Grid.Row="2" Content="Apply Positions" Click="ApplyPositions_Click" HorizontalAlignment="Center"/>
+                </Grid>
+                <!-- Set motorcontrols -->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Name="tbMotorstep" Text="Motorstep (px)" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock Text="X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="MotorXStepTextBox" Width="50" VerticalAlignment="Center" Text="0,3"/>
+                        <TextBlock Text="Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="MotorYStepTextBox" Width="50" VerticalAlignment="Center" Text="0,5"/>
+                        <TextBlock Text="Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="MotorZStepTextBox" Width="50" VerticalAlignment="Center" Text="0,5"/>
+                    </StackPanel>
+                    <TextBlock Grid.Row="2" Name="tbMotorDuration" Text="Step duration (ms)" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal">
+                        <TextBlock Text="X:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="MotorXStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
+                        <TextBlock Text="Y:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="MotorYStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
+                        <TextBlock Text="Z:" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox x:Name="MotorZStepDurationTextBox" Width="50" VerticalAlignment="Center" Text="10"/>
+                    </StackPanel>
+                    <Button Grid.Row="4" Content="Apply Controls" Click="ApplySpeed_Click" HorizontalAlignment="Center"/>
+                </Grid>
+                <!-- Directional Control -->
+                <Grid Grid.Row="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Name="tbDirectionalControl" Text="Directional Controls" Height="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Button Grid.Column="2" Grid.Row="1" Content="X+" Click="MoveXPlusButton_Click"  />
+                        <Button Grid.Column="0" Grid.Row="1" Content="X-" Click="MoveXMinusButton_Click" />
+                        <Button Grid.Column="1" Grid.Row="0" Content="Y+" Click="MoveYPlusButton_Click" />
+                        <Button Grid.Column="1" Grid.Row="2" Content="Y-" Click="MoveYMinusButton_Click" />
+                        <Button Grid.Column="2" Grid.Row="0" Content="Z+" Click="MoveZPlusButton_Click" />
+                        <Button Grid.Column="2" Grid.Row="2" Content="Z-" Click="MoveZMinusButton_Click" />
+                        <Button Grid.Column="1" Grid.Row="1" Content="Stop" Background="Red" Click="StopButton_Click"/>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
