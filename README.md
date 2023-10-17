@@ -1,5 +1,9 @@
 # SlideTableMover
 
+Az alkalmazás az alábbi linkről letölthető és futtatható .exe formátummal:
+
+https://drive.google.com/file/d/1P-n-sgI9m2qib7DZ8QRsBxUtl2R0N7od/view?usp=sharing
+
 ### Készítsen C#-ban egy olyan WPF alkalmazást, amely képes vezérelni egy tárgylemez asztalt.
 Megvalósítva
 ### A tárgylemez asztalt 3 léptetőmotor mozgatja az X, Y és Z tengelyek mentén (hasonlóan egyes CNC gépekhez, vagy 3D nyomtatókhoz)
